@@ -2,13 +2,17 @@ package com.example.vocabularybook;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBHelper extends SQLiteOpenHelper {
     final private String TAG = "DBHelper";
@@ -52,8 +56,9 @@ public class DBHelper extends SQLiteOpenHelper {
      * 向表中新添一条词汇
      *
      * @param voc 新增的词汇
+     * @return 添加词汇是否成功
      */
-    public void addVocabulary(Vocabulary voc) {
+    public Boolean addVocabulary(Vocabulary voc) {
         SQLiteDatabase db = null;
         boolean insertSuccessful = true;
         try {
@@ -106,13 +111,121 @@ public class DBHelper extends SQLiteOpenHelper {
             //插入成功才写入数据库
             if(insertSuccessful)
                 db.setTransactionSuccessful();
+            return true;
 
         } catch(Exception e) {
             e.printStackTrace();
+            return false;
         } finally {
             db.endTransaction();
             db.close();
         }
     }
-    
+
+    /**
+     * 更新表中一条词汇
+     * 这里有个问题，如果删除成功了而插入没成功怎么办？但似乎也不能在这里也加一个transaction。。。。
+     *
+     * @param oldWord 要更新的词汇的word值
+     * @param voc 该词汇应当更新成的值
+     */
+    public Boolean updateVocabulary(String oldWord, Vocabulary voc) {
+        //若用户修改了word值，则查找新word值是否已在数据库中，如果是，则驳回请求
+        SQLiteDatabase db = getWritableDatabase();
+        if(!oldWord.equals(voc.getWord())) {
+            Cursor cursor = db.query(TABLE_VOCABULARY, null, COLUMN_WORD + "=?",
+                    new String[]{voc.getWord()}, null, null, null, null);
+            if(cursor.getCount() != 0) {
+                Log.i(TAG, "update failed! word exists");
+                return false;
+            }
+        }
+
+        //删除三个表中该单词所有信息
+        removeVocabulary(new String[]{oldWord});
+
+        //再将更新后的单词信息存入表中
+        addVocabulary(voc);
+        return true;
+    }
+
+    /**
+     * 从表中删除若干词汇
+     *
+     * @param words 要删除的词汇列表（用词汇的word值来表示）
+     */
+    public void removeVocabulary(String[] words) {
+        SQLiteDatabase db = getWritableDatabase();
+        int id = db.delete(TABLE_MEANING, COLUMN_WORD + "=?", words);
+        Log.i(TAG, id + "items removed from " + TABLE_MEANING);
+        id = db.delete(TABLE_SENTENCE, COLUMN_WORD + "=?", words);
+        Log.i(TAG, id + "items removed from " + TABLE_SENTENCE);
+        id = db.delete(TABLE_VOCABULARY, COLUMN_WORD + "=?", words);
+        Log.i(TAG, id + "items removed from " + TABLE_VOCABULARY);
+        db.close();
+    }
+
+    /**
+     * 查询表中所有词汇
+     *
+     * @return 查询到的词汇
+     */
+    public List<Vocabulary> queryVocabulary() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cs_word = db.query(TABLE_VOCABULARY, null, null,
+                null, null, null, null, null);
+        Cursor cs_mean = db.query(TABLE_MEANING, null, null,
+                null, null, null, null, null);
+        Cursor cs_sen = db.query(TABLE_SENTENCE, null, null,
+                null, null, null, null, null);
+        return CursorToVocabulary(cs_word, cs_mean, cs_sen);
+    }
+
+    /**
+     * 将查询结果转化为Vocabulary类
+     *
+     * @param cs_word VOCABULARY表的查询结果
+     * @param cs_mean MEANING表的查询结果
+     * @param cs_sen SENTENCE表的查询结果
+     * @return 转化成的Vocabulary类
+     */
+    private List<Vocabulary> CursorToVocabulary(Cursor cs_word, Cursor cs_mean, Cursor cs_sen) {
+        int size = cs_word.getCount();
+        if(size == 0)
+            return null;
+
+        //使用hashmap组织查询结果
+        Map<String, Vocabulary> map = new HashMap<String, Vocabulary>();
+
+        //首先登录所有word值
+        cs_word.moveToFirst();
+        do {
+            map.put(cs_word.getString(0), null);
+        } while(cs_word.moveToNext());
+
+        //其次通过meaning值构建每个word对应的Vocabulary类，将map中所有对象实体化
+        cs_mean.moveToFirst();
+        do {
+            String name = cs_mean.getString(0);
+            String meaning = cs_mean.getString(1);
+            if(map.get(name) == null)
+                map.put(name, new Vocabulary(name, meaning));
+            else
+                map.get(name).addMeaning(meaning);
+        } while(cs_mean.moveToNext());
+
+        //最终插入sentence
+        cs_sen.moveToFirst();
+        do {
+            String name = cs_mean.getString(0);
+            map.get(name).addSentence(cs_mean.getString(1), cs_mean.getString(2));
+        } while(cs_mean.moveToNext());
+
+        //将map转化为List
+        List<Vocabulary> list = new ArrayList<>();
+        for(String key: map.keySet())
+            list.add(map.get(key));
+        return list;
+    }
+
 }
