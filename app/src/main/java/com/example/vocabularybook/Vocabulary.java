@@ -1,5 +1,7 @@
 package com.example.vocabularybook;
 
+import android.content.ContentValues;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -88,30 +90,17 @@ public class Vocabulary {
         assert(new_meaning != null);
         meaning.add(new_meaning);
     }
+
+    public String getWord() {
+        return word;
+    }
+    public List<String> getMeaning() {
+        return meaning;
+    }
+    public List<String> getSentence_text() {
+        return sentence_text;
+    }
+    public List<String> getSentence_translation() {
+        return sentence_translation;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
