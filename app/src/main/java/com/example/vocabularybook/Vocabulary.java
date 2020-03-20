@@ -19,12 +19,9 @@ public class Vocabulary {
      *
      * @param _word 单词
      * @param _meaning 单词的首个释义
-     *
-     * @exception IllegalArgumentException String为null
      */
-    public Vocabulary(String _word, String _meaning) throws IllegalArgumentException {
-        if(_word == null || _meaning == null)
-            throw new IllegalArgumentException();
+    public Vocabulary(String _word, String _meaning){
+        assert (_word != null || _meaning != null);
         word = _word;
         meaning = new ArrayList<>();
         meaning.add(_meaning);
@@ -75,26 +72,21 @@ public class Vocabulary {
      *
      * @param _text 例句原文
      * @param _translation 例句翻译
-     *
-     * @exception IllegalArgumentException String为null
      */
-    public void addSentence(String _text, String _translation) throws IllegalArgumentException{
-        if(_text == null || _translation == null)
-            throw new IllegalArgumentException();
+    public void addSentence(String _text, String _translation){
+        assert(_text != null && _translation != null);
         sentence_text.add(_text);
         sentence_translation.add(_translation);
     }
 
     /**
      * 向该词汇添加一条新的释义
-     * @param new_meaning
      *
-     * @exception IllegalArgumentException String为null
+     * @param new_meaning
      */
-    public void addMeaning(String new_meaning) throws IllegalArgumentException{
-        if(new_meaning == null)
-            throw new IllegalArgumentException();
-
+    public void addMeaning(String new_meaning){
+        assert(new_meaning != null);
+        meaning.add(new_meaning);
     }
 }
 
