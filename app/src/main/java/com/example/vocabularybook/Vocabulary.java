@@ -1,6 +1,7 @@
 package com.example.vocabularybook;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,5 +103,28 @@ public class Vocabulary {
     }
     public List<String> getSentence_translation() {
         return sentence_translation;
+    }
+
+    /**
+     * 通过Log.i输出所有信息
+     */
+    public void showInfo() {
+        //输出word
+        final String TAG = "Vocabulary";
+        Log.i(TAG, "word: " + word);
+
+        //输出meaning
+        String mean = new String();
+        for(int i=0; i<meaning.size(); i++)
+            mean += meaning.get(i) + "\n";
+        Log.i(TAG, "meaning: " + mean);
+
+        //输出sentence
+        String sen = new String();
+        if(sentence_text.size() != 0) {
+            for(int i=0; i<sentence_text.size(); i++)
+                sen += sentence_text.get(i) + "\n" + sentence_translation.get(i) + "\n";
+            Log.i(TAG, "sentence: " + sen);
+        }
     }
 }

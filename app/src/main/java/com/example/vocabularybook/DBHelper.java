@@ -108,9 +108,9 @@ public class DBHelper extends SQLiteOpenHelper {
             else
                 throw new Exception();
 
-            //插入成功才写入数据库
-            if(insertSuccessful)
-                db.setTransactionSuccessful();
+            //写入数据库
+            db.setTransactionSuccessful();
+            Log.i(TAG, "vocabulary insert successful");
             return true;
 
         } catch(Exception e) {
@@ -161,6 +161,20 @@ public class DBHelper extends SQLiteOpenHelper {
         id = db.delete(TABLE_SENTENCE, COLUMN_WORD + "=?", words);
         Log.i(TAG, id + "items removed from " + TABLE_SENTENCE);
         id = db.delete(TABLE_VOCABULARY, COLUMN_WORD + "=?", words);
+        Log.i(TAG, id + "items removed from " + TABLE_VOCABULARY);
+        db.close();
+    }
+
+    /**
+     * 删除表中所有词汇
+     */
+    public void removeAllVocabulary() {
+        SQLiteDatabase db = getWritableDatabase();
+        int id = db.delete(TABLE_MEANING, null, null);
+        Log.i(TAG, id + "items removed from " + TABLE_MEANING);
+        id = db.delete(TABLE_SENTENCE, null, null);
+        Log.i(TAG, id + "items removed from " + TABLE_SENTENCE);
+        id = db.delete(TABLE_VOCABULARY, null, null);
         Log.i(TAG, id + "items removed from " + TABLE_VOCABULARY);
         db.close();
     }
@@ -217,9 +231,9 @@ public class DBHelper extends SQLiteOpenHelper {
         //最终插入sentence
         cs_sen.moveToFirst();
         do {
-            String name = cs_mean.getString(0);
-            map.get(name).addSentence(cs_mean.getString(1), cs_mean.getString(2));
-        } while(cs_mean.moveToNext());
+            String name = cs_sen.getString(0);
+            map.get(name).addSentence(cs_sen.getString(1), cs_sen.getString(2));
+        } while(cs_sen.moveToNext());
 
         //将map转化为List
         List<Vocabulary> list = new ArrayList<>();
