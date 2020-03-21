@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:text="feeble"
+        android:text="@string/word_sample"
         android:textSize="20sp" />
 
     <TextView
@@ -20,6 +20,6 @@
         android:layout_marginBottom="5dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="adj. 虚弱的"
+        android:text="@string/meaning1_sample"
         android:textSize="18sp" />
 </LinearLayout>

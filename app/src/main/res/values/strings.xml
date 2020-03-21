@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">VocabularyBook</string>
+
+    <!-- 单词示例，显示在layout文件里，但不显示在app中，仅为方便看布局效果 -->
+    <string name="word_sample">figure</string>
+    <string name="meaning1_sample">n. (代表数量，尤指官方资料中的)数字;数字符号;字码;位数;算术</string>
+    <string name="meaning2_sample">v. 是重要部分;是…的部分;认为，认定(某事将发生或属实);计算(数量或成本)</string>
+    <string name="sentence_text1_sample">It would be very nice if we had a true figure of how many people in this country haven\'t got a job.</string>
+    <string name="sentence_translation1_sample">如果我们能得到该国失业人口的真实数字就好了。</string>
+    <string name="sentence_text2_sample">Alistair saw the dim figure of Rose in the chair.</string>
+    <string name="sentence_translation2_sample">阿利斯泰尔看见了坐在椅子里的罗丝的模糊身影。</string>
+
 </resources>

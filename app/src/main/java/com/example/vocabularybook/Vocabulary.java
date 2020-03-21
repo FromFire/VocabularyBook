@@ -1,17 +1,16 @@
 package com.example.vocabularybook;
 
-import android.content.ContentValues;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * 词汇类，由用户手动编辑添加
  *
  */
-public class Vocabulary {
+public class Vocabulary implements Serializable {
     private String word;                        //单词
     private List<String> meaning;               //释义（可有多个，例如每个词性一个释义）
     private List<String> sentence_text;         //例句原文（可以为空）
