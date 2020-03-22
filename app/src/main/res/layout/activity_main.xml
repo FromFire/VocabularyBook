@@ -30,7 +30,8 @@
         app:layout_constraintTop_toBottomOf="@+id/NumberOfWords" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/addWord"
+        android:onClick="addWord"
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:background="@drawable/round_button"

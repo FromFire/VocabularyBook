@@ -132,14 +132,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public Boolean updateVocabulary(String oldWord, Vocabulary voc) {
         //若用户修改了word值，则查找新word值是否已在数据库中，如果是，则驳回请求
         SQLiteDatabase db = getWritableDatabase();
-        if(!oldWord.equals(voc.getWord())) {
-            Cursor cursor = db.query(TABLE_VOCABULARY, null, COLUMN_WORD + "=?",
-                    new String[]{voc.getWord()}, null, null, null, null);
-            if(cursor.getCount() != 0) {
-                Log.i(TAG, "update failed! word exists");
-                return false;
-            }
-        }
+        if(!oldWord.equals(voc.getWord()) && checkVocabularyExist(voc.getWord()))
+            return false;
 
         //删除三个表中该单词所有信息
         removeVocabulary(new String[]{oldWord});
@@ -240,6 +234,23 @@ public class DBHelper extends SQLiteOpenHelper {
         for(String key: map.keySet())
             list.add(map.get(key));
         return list;
+    }
+
+    /**
+     * 查询数据库中是否含有某个单词
+     *
+     * @param word 被查询的单词
+     * @return 该单词是否在数据库中存在
+     */
+    public Boolean checkVocabularyExist(String word) {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(TABLE_VOCABULARY, null, COLUMN_WORD + "=?",
+                new String[]{word}, null, null, null, null);
+        if(cursor.getCount() != 0) {
+            Log.i(TAG, "word exists");
+            return true;
+        }
+        return false;
     }
 
 }
