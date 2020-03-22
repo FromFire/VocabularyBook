@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -15,6 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddWord extends AppCompatActivity {
 
@@ -208,13 +213,69 @@ public class AddWord extends AppCompatActivity {
 
     /**
      * 点击函数："add" 页面最下方的大按钮
-     * 检查新单词的合法性，若不合法，提示输入不合法
+     * 检查新单词的合法性，且本页面所有输入框均不能为空，若不合法，提示输入不合法
      * 若合法，将新增的单词回传给MainActivity
      *
      * @param v 用不到
      */
     public void commitAdd(View v) {
+        //检查该单词是否为空
+        String word = ((EditText) findViewById(R.id.word)).getText().toString();
+        if (word.length() == 0) {
+            Toast.makeText(this, "Word is empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        //检查该单词是否已存在
+        DBHelper dbHelper = new DBHelper(this);
+        if (dbHelper.checkVocabularyExist(word)) {
+            Toast.makeText(this, "Word already exists!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //获取所有meaning并生成列表，同时检查是否有内容为空
+        List<String> meaningList = new ArrayList();
+        for (int i = meaningAddIndex - meaning; i < meaningAddIndex; i++) {
+            ConstraintLayout cl = (ConstraintLayout) pageLinear.getChildAt(i);
+            EditText et = (EditText) cl.getChildAt(0);
+            String mean = et.getText().toString();
+            if (mean.length() == 0) {
+                Toast.makeText(this, "Meaning is empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            meaningList.add(mean);
+        }
+
+        //获取所有text和translation数组并生成列表，同时检查是否有内容为空
+        List<String> textList = new ArrayList();
+        List<String> transList = new ArrayList();
+        for (int i = sentenceAddIndex - sentence; i < sentenceAddIndex; i++) {
+            ConstraintLayout cl = (ConstraintLayout) pageLinear.getChildAt(i);
+            EditText etText = (EditText) cl.getChildAt(0);
+            EditText etTrans = (EditText) cl.getChildAt(1);
+            String text = etText.getText().toString();
+            String trans = etTrans.getText().toString();
+            if (text.length() == 0 || trans.length() == 0) {
+                Toast.makeText(this, "Sentence is empty!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            textList.add(text);
+            transList.add(trans);
+        }
+
+        //生成Vocabulary
+        Vocabulary voc = new Vocabulary(word, meaningList.get(0));
+        for (int i = 1; i < meaning; i++)
+            voc.addMeaning(meaningList.get(i));
+        for (int i = 0; i < sentence; i++)
+            voc.addSentence(textList.get(i), transList.get(i));
+        voc.showInfo();
+
+        //将Vocabulary回传到MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("voc", voc);
+        setResult(0, intent);
+        finish();
     }
 
     /**

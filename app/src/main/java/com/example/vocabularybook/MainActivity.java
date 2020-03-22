@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_ADDWORD:
                 Vocabulary voc = (Vocabulary) data.getSerializableExtra("voc");
                 dbHelper.addVocabulary(voc);
+                setListView();
         }
     }
 
