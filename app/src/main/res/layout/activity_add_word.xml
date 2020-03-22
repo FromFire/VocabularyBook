@@ -61,7 +61,8 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:scaleType="fitXY"
                 android:background="@drawable/round_button"
-                android:src="@mipmap/icon_del"/>
+                android:src="@mipmap/icon_del"
+                android:onClick="deleteMeaning"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

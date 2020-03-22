@@ -52,7 +52,7 @@ public class AddWord extends AppCompatActivity {
      * 点击函数："addMeaning" meaning区域下方的绿色加号小按钮
      * 添加一个新的空白释义
      *
-     * @param v
+     * @param v 用不到
      */
     public void addMeaning(View v) {
         //创建输入meaning的EditText
@@ -70,9 +70,17 @@ public class AddWord extends AppCompatActivity {
         button.setScaleType(ImageView.ScaleType.CENTER_CROP);
         LinearLayout.LayoutParams paramButton = new LinearLayout.LayoutParams(80, 80);
         button.setLayoutParams(paramButton);
+        //点击函数即deleteMeaning
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteMeaning(v);
+            }
+        });
 
         //创建容纳上述控件的Constraint Layout
         ConstraintLayout layout = new ConstraintLayout(this);
+        layout.setId(View.generateViewId());
         layout.addView(edit);
         layout.addView(button);
 
@@ -117,7 +125,18 @@ public class AddWord extends AppCompatActivity {
      * @param v
      */
     public void deleteMeaning(View v) {
+        if(meaning == 1)
+            return;
+        View toDel = (View)v.getParent();
+        for(int i=0; i<pageLinear.getChildCount(); i++) {
+            if(pageLinear.getChildAt(i).getId() == toDel.getId())
+                pageLinear.removeViewAt(i);
+        }
 
+        //维护成员函数
+        meaning--;
+        meaningAddIndex--;
+        sentenceAddIndex--;
     }
 
     /**
