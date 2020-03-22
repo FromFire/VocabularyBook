@@ -7,6 +7,7 @@
     tools:context=".AddWord">
 
     <LinearLayout
+        android:id="@+id/ParentLayout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -53,8 +54,8 @@
 
             <ImageButton
                 android:id="@+id/meaning_delete"
-                android:layout_width="30sp"
-                android:layout_height="30sp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -70,9 +71,10 @@
             android:layout_height="20sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10sp"
-            android:background="#FFFFFF"
+            android:background="#FFFFFFFF"
             android:scaleType="fitXY"
-            app:srcCompat="@mipmap/icon_add_item" />
+            app:srcCompat="@mipmap/icon_add_item"
+            android:onClick="addMeaning"/>
 
         <View
             android:id="@+id/divider"
@@ -136,7 +138,7 @@
             android:layout_height="20sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10sp"
-            android:background="#FFFFFF"
+            android:background="#FFFFFFFF"
             android:scaleType="fitXY"
             app:srcCompat="@mipmap/icon_add_item" />
 
