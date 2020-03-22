@@ -130,7 +130,8 @@
                 android:src="@mipmap/icon_del"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="deleteSentence" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageButton
@@ -141,7 +142,8 @@
             android:layout_marginTop="10sp"
             android:background="#FFFFFFFF"
             android:scaleType="fitXY"
-            app:srcCompat="@mipmap/icon_add_item" />
+            app:srcCompat="@mipmap/icon_add_item"
+            android:onClick="addSentence"/>
 
         <Button
             android:id="@+id/add"

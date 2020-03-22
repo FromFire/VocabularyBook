@@ -56,21 +56,11 @@ public class AddWord extends AppCompatActivity {
      */
     public void addMeaning(View v) {
         //创建输入meaning的EditText
-        EditText edit = new EditText(this);
+        EditText edit = getInputEditText();
         edit.setTextSize(18);
-        edit.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        edit.setSingleLine(false);
-        LinearLayout.LayoutParams paramEdit = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
-        edit.setLayoutParams(paramEdit);
 
-        //创建用于删除该meaning的减号小按钮
-        ImageButton button = new ImageButton(this);
-        button.setBackground(getDrawable(R.drawable.round_button));
-        button.setImageResource(R.mipmap.icon_del);
-        button.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        LinearLayout.LayoutParams paramButton = new LinearLayout.LayoutParams(80, 80);
-        button.setLayoutParams(paramButton);
-        //点击函数即deleteMeaning
+        //创建用于删除该meaning的减号小按钮，点击函数即deleteMeaning
+        ImageButton button = getDelButton();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,8 +75,6 @@ public class AddWord extends AppCompatActivity {
         layout.addView(button);
 
         //设置Constraint Layout的布局，参照layout中meaning_sample的布局
-        edit.setId(View.generateViewId());
-        button.setId(View.generateViewId());
         int editId = edit.getId();
         int buttonId = button.getId();
         ConstraintSet set = new ConstraintSet();
@@ -146,7 +134,58 @@ public class AddWord extends AppCompatActivity {
      * @param v 用于定位新空白例句插入到LinearLayout哪个位置
      */
     public void addSentence(View v) {
+        //创建输入text和translation的EditText
+        EditText text = getInputEditText();
+        EditText trans = getInputEditText();
 
+        //创建用于删除该sentence的减号小按钮,点击函数即deleteSentence
+        ImageButton button = getDelButton();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteSentence(v);
+            }
+        });
+
+        //创建容纳上述控件的Constraint Layout
+        ConstraintLayout layout = new ConstraintLayout(this);
+        layout.setId(View.generateViewId());
+        layout.addView(text);
+        layout.addView(trans);
+        layout.addView(button);
+
+        //设置Constraint Layout的布局，参照layout中meaning_sample的布局
+        int textId = text.getId();
+        int transId = trans.getId();
+        int buttonId = button.getId();
+        ConstraintSet set = new ConstraintSet();
+        set.clone(layout);
+        //设置text输入框位于布局左上角
+        set.connect(textId, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+        set.connect(textId, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+        //设置trans输入框位于text正下方，即左下角
+        set.connect(transId, ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+        set.connect(transId, ConstraintSet.TOP, textId, ConstraintSet.BOTTOM);
+        //设置按钮位于布局右侧
+        set.connect(buttonId, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        set.connect(buttonId, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+        set.connect(buttonId, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+        //设置两个输入框位于按钮左侧
+        set.connect(textId, ConstraintSet.END, buttonId, ConstraintSet.START);
+        set.connect(transId, ConstraintSet.END, buttonId, ConstraintSet.START);
+        //应用布局
+        set.applyTo(layout);
+
+        //设置layout上间距
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        param.setMargins(0, 20, 0, 0);
+        layout.setLayoutParams(param);
+
+        //插入和维护Linear Layout
+        pageLinear.addView(layout, sentenceAddIndex);
+        sentenceAddIndex++;
+        sentence++;
     }
 
     /**
@@ -156,7 +195,15 @@ public class AddWord extends AppCompatActivity {
      * @param v
      */
     public void deleteSentence(View v) {
+        View toDel = (View)v.getParent();
+        for(int i=0; i<pageLinear.getChildCount(); i++) {
+            if(pageLinear.getChildAt(i).getId() == toDel.getId())
+                pageLinear.removeViewAt(i);
+        }
 
+        //维护成员函数
+        sentence--;
+        sentenceAddIndex--;
     }
 
     /**
@@ -170,4 +217,36 @@ public class AddWord extends AppCompatActivity {
 
     }
 
+    /**
+     * 生成一个可多行输入，宽度为0的EditText，并为其分配id
+     * 用于meaning和sentence的输入
+     *
+     * @return 生成的EditText
+     */
+    public EditText getInputEditText() {
+        EditText editText = new EditText(this);
+        editText.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        editText.setSingleLine(false);
+        LinearLayout.LayoutParams paramEdit = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+        editText.setLayoutParams(paramEdit);
+        editText.setId(View.generateViewId());
+        return editText;
+    }
+
+    /**
+     * 生成一个主题色的减号小按钮，并为其分配id
+     * 用于删除meaning和sentence输入框
+     *
+     * @return 生成的ImageButton
+     */
+    public ImageButton getDelButton() {
+        ImageButton button = new ImageButton(this);
+        button.setBackground(getDrawable(R.drawable.round_button));
+        button.setImageResource(R.mipmap.icon_del);
+        button.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        LinearLayout.LayoutParams paramButton = new LinearLayout.LayoutParams(80, 80);
+        button.setLayoutParams(paramButton);
+        button.setId(View.generateViewId());
+        return button;
+    }
 }
