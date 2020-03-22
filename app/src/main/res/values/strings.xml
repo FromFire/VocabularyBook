@@ -10,4 +10,14 @@
     <string name="sentence_text2_sample">Alistair saw the dim figure of Rose in the chair.</string>
     <string name="sentence_translation2_sample">阿利斯泰尔看见了坐在椅子里的罗丝的模糊身影。</string>
 
+    <!-- 单词hint，显示在activity_add_word.xml中 -->
+    <string name="word_hint">apple</string>
+    <string name="meaning_hint">n. 苹果</string>
+    <string name="sentence_text_hint">I want an apple.</string>
+    <string name="sentence_translation_hint">我想要一个苹果。</string>
+
+    <!-- 添加新单词时的提示 -->
+    <string name="guide_meaning">MEANINGS</string>
+    <string name="guide_sentence">SENTENCES</string>
+
 </resources>

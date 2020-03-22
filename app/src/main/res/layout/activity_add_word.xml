@@ -1,9 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddWord">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp">
+
+        <EditText
+            android:id="@+id/word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60sp"
+            android:gravity="center_horizontal"
+            android:inputType="textPersonName"
+            android:hint="@string/word_hint"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30sp"
+            android:textSize="18sp"
+            android:text="@string/guide_meaning"
+            android:textColor="@color/ColorTheme"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/meaning_sample"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/meaning"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/meaning_hint"
+                android:inputType="textMultiLine|textPersonName"
+                android:minLines="1"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/meaning_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/meaning_delete"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:scaleType="fitXY"
+                android:background="@drawable/round_button"
+                android:src="@mipmap/icon_del"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/addMeaning"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10sp"
+            android:background="#FFFFFF"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/icon_add_item" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="30sp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"
+            android:textSize="18sp"
+            android:text="@string/guide_sentence"
+            android:textColor="@color/ColorTheme"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sentence_sample"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/sentence_text"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:hint="@string/sentence_text_hint"
+                android:inputType="textMultiLine|textPersonName"
+                android:minLines="1"
+                app:layout_constraintEnd_toStartOf="@+id/sentence_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/sentence_translation"
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:hint="@string/sentence_translation_hint"
+                android:inputType="textMultiLine|textPersonName"
+                android:minLines="1"
+                app:layout_constraintEnd_toStartOf="@+id/sentence_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sentence_text" />
+
+            <ImageButton
+                android:id="@+id/sentence_delete"
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:background="@drawable/round_button"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_del"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/addSentence"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10sp"
+            android:background="#FFFFFF"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/icon_add_item" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:background="@color/ColorTheme"
+            android:text="ADD WORD" />
+
+
+    </LinearLayout>
+
+</ScrollView>
